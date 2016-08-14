@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<!--
+ * Document   : tags.html
+ * Author     : josephtinsley
+ * Description: JQuery/bootstrap Tag input, space delimited and POST submit
+ * Date		  : 2016-08-14
+ * http://twitter.com/josephtinsley 
+-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <title>JQuery Tags</title>
+
+        <!-- Bootstrap -->
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+        <style>
+
+            span
+            {
+               display: inline-block;
+               padding:3px 10px;
+               margin:3px;
+               background-color: lightsteelblue;
+               color:#fff;
+               border-radius: 2px;
+            }
+            #tags
+            {
+                border:1px solid #ddd;
+                width:400px;
+            }
+            #add-tag{
+                width: 75px;
+                height:40px;
+                margin-left: 5px;
+                background: rgba(0, 0, 0, 0);
+                border: none;
+                outline: none;
+            }
+            
+            input:focus
+            {
+                outline: none;
+            }
+            .spantags
+            {
+                cursor: pointer;
+            }
+        </style>
+        
+        <script>
+         $(function()
+         {
+             
+
+                $("#add-tag").focus();
+
+                $("#add-tag").keydown(function(evt)
+                {
+                    console.log(evt.keyCode);
+                    
+                    // KEYDOWN DETECTION CODES 
+                    // - keyCode === 32 ENTER KEY
+                    // - keyCode === 188 COMMA
+                    // - keyCode === 32 SPACEBAR
+                    if(evt.keyCode === 32) 
+                    {
+                        var tagHtml ='';
+                        var tag = $.trim($("#add-tag").val());
+                        
+                        tagHtml =  '<span class="spantags" id="'+tag+'">'+ tag + '</span>';
+                        $("#tags").prepend(tagHtml);
+
+                        $("#add-tag").val('');
+                        copyTextToInputBox();
+                    }
+                });
+                
+                //WHEN A TAG IS CLICKED, REMOVE A TAGS FROM THE CURRENT LIST
+                $(document).on('click','.spantags',function()
+                {
+                    var ids = $(this).attr("id");
+                    $("#"+ids).remove();
+                    copyTextToInputBox();
+                });
+                
+
+                //MAKES A COPY OF KEYED ENTRIES, CREATES A STRING, PLACES INTO A FORM INPUT FOR SUBMISSION    
+                var copyTextToInputBox = function()
+                {
+                    var tagArr = [];
+                    $( "#tag-holder" ).val("");
+                    $( ".spantags" ).each(function() {
+                        tagArr.push($( this ).text());
+                        $( "#tag-holder" ).val(tagArr.join(","));
+                    });
+                };
+
+                //POST TAGS STRING VIA JQUERY
+                $(document).on('click','button',function()
+                {
+                    var tagString   = $( "#tag-holder" ).val();
+                    if(tagString.length > 0)
+                    {
+                        $.post(".somescriptgoeshere.php",{tags:tagString},function(results)
+                        {
+                           alert(results); 
+                        });
+                    }
+                });
+         });
+        </script>
+
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">
+                    <h1>Tag Input!</h1>
+                </div>
+            </div>
+               
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">
+                    <div id="tags">
+                        <input type="text" id="add-tag" placeholder="add tag"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">
+                    <!-- HIDDEN FORM USED TO POST TAG STRINGS -->
+                    <input id="tag-holder" type="hidden" value="" />
+                </div>
+            </div>
+            
+            
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">
+                    <button class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+
+        </div>    
+    </body>
+</html>
