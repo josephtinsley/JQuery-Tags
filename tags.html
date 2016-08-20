@@ -25,37 +25,38 @@
 
         <style>
 
-            span
+            .spantags
             {
                display: inline-block;
                padding:3px 10px;
-               margin:3px;
+               margin:3px -1px 3px 3px;
                background-color: lightsteelblue;
                color:#fff;
                border-radius: 2px;
+               cursor: pointer;
             }
             #tags
             {
                 border:1px solid #ddd;
                 width:400px;
             }
+            #tags-container{
+                margin:3px;
+            }
             #add-tag{
                 width: 75px;
                 height:40px;
-                margin-left: 5px;
+                margin-left: 0px;
+                padding-left: 0px;
                 background: rgba(0, 0, 0, 0);
                 border: none;
                 outline: none;
             }
-            
             input:focus
             {
                 outline: none;
             }
-            .spantags
-            {
-                cursor: pointer;
-            }
+
         </style>
         
         <script>
@@ -79,7 +80,7 @@
                         var tag = $.trim($("#add-tag").val());
                         
                         tagHtml =  '<span class="spantags" id="'+tag+'">'+ tag + '</span>';
-                        $("#tags").prepend(tagHtml);
+                        $("#tags-container").append(tagHtml);
 
                         $("#add-tag").val('');
                         copyTextToInputBox();
@@ -133,6 +134,7 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">
                     <div id="tags">
+                    	<span id="tags-container"></span>
                         <input type="text" id="add-tag" placeholder="add tag"  autocomplete="off">
                     </div>
                 </div>
